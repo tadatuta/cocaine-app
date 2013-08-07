@@ -34,9 +34,9 @@ if ('cocaine' == app.get('env')) {
   app.set('handle', handle);
 } else {
   app.set('handle', process.env.PORT || 3000);
-  app.use(express.errorHandler());
 }
 
+app.use(express.errorHandler());
 app.get('/', routes.index);
 app.get('/users', user.list);
 
