@@ -13,6 +13,8 @@ var express = require('express')
 
 var app = express();
 
+argv.uuid && app.set('env', 'cocaine');
+
 // all environments
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
@@ -24,14 +26,15 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
-if ('development' == app.get('env')) {
+if ('cocaine' == app.get('env')) {
+  var cocaine = require('cocaine'),
+    W = new cocaine.Worker(argv),
+    handle = W.getListenHandle('http');
+
+  app.set('handle', handle);
+} else {
   app.set('handle', process.env.PORT || 3000);
   app.use(express.errorHandler());
-} else {
-  var cocaine = require('cocaine');
-  var W = new cocaine.Worker(argv);
-  var handle = W.getListenHandle('http');
-  app.set('handle', handle);
 }
 
 app.get('/', routes.index);
