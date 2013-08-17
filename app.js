@@ -7,7 +7,7 @@
 var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
-  , http = require('http')
+  , http = require('cocaine').http
   , path = require('path')
   , argv = require('optimist').argv;
 
@@ -40,7 +40,8 @@ app.use(express.errorHandler());
 app.get('/', routes.index);
 app.get('/users', user.list);
 
-http.createServer(app).listen(app.get('handle'), function(){
+var server = new http.Server(app);
+server.listen(app.get('handle'), function(){
   console.log('Express server listening on ' +
     (typeof app.get('handle') === 'number' ?
         'port ' + app.get('handle') : 'cocane handle') );
